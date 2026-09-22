@@ -5122,6 +5122,7 @@ function Tab:AssetFilter(opts)
                 Parent = rowFrame,
             })
             corner(state, UDim.new(0, 6))
+            state.Visible = opts.ReadOnly ~= true
 
             local row = {
                 Id = id,
@@ -5133,6 +5134,7 @@ function Tab:AssetFilter(opts)
             table.insert(rows, row)
             renderRow(row)
             rowFrame.MouseButton1Click:Connect(function()
+                if opts.ReadOnly == true then return end
                 selected[id] = selected[id] ~= true
                 renderRow(row)
                 updateSummary()
@@ -5146,6 +5148,11 @@ function Tab:AssetFilter(opts)
     search:GetPropertyChangedSignal("Text"):Connect(applySearch)
     buildRows()
     return finishElement(self, opts, {
+        Add = function(_, item)
+            if type(item) ~= "table" then return end
+            table.insert(items, 1, item)
+            buildRows()
+        end,
         Refresh = function(_, newItems)
             items = type(newItems) == "table" and newItems or {}
             buildRows()

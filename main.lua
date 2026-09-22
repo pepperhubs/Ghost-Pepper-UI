@@ -5030,10 +5030,12 @@ function Tab:AssetFilter(opts)
 
     local function renderRow(row)
         local enabled = selected[row.Id] == true
+        local selectedColor = opts.SelectedColor or Theme.Accent
+        local blockedColor = opts.BlockedColor or Theme.Surface3
         row.State.Text = enabled and (opts.SelectedText or "Selected") or (opts.BlockedText or "Blocked")
-        row.State.TextColor3 = enabled and Theme.AccentDark or Theme.Muted
-        row.State.BackgroundColor3 = enabled and Theme.Accent or Theme.Surface3
-        row.Stroke.Color = enabled and Theme.Accent or Theme.Stroke
+        row.State.TextColor3 = enabled and (opts.SelectedTextColor or Theme.AccentDark) or (opts.BlockedTextColor or Theme.Text)
+        row.State.BackgroundColor3 = enabled and selectedColor or blockedColor
+        row.Stroke.Color = enabled and selectedColor or blockedColor
         row.Stroke.Transparency = enabled and 0.25 or 0
     end
 

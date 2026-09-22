@@ -5254,57 +5254,69 @@ end
 
 function Tab:AddAssetLogItem(item)
     item = type(item) == "table" and item or {}
-    local row, rowStroke = card(self, "Frame", TOUCH and 78 or 72, {})
+    local height = TOUCH and 92 or 86
+    local row, rowStroke = card(self, "Frame", height, {})
     row.ClipsDescendants = true
     rowStroke.Color = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Stroke
 
     create("Frame", {
-        Size = UDim2.fromOffset(3, TOUCH and 78 or 72),
+        Size = UDim2.fromOffset(3, height),
         BackgroundColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Accent,
         BorderSizePixel = 0,
         Parent = row,
     })
     local previewHolder = create("Frame", {
-        Position = UDim2.fromOffset(10, 7),
-        Size = UDim2.fromOffset(TOUCH and 64 or 58, TOUCH and 64 or 58),
+        Position = UDim2.fromOffset(10, 10),
+        Size = UDim2.fromOffset(TOUCH and 70 or 64, TOUCH and 70 or 64),
         BackgroundColor3 = Theme.Surface2,
         BorderSizePixel = 0,
         Parent = row,
     })
     corner(previewHolder, UDim.new(0, 6))
-    local viewport = create("ViewportFrame", {
+    create("ImageLabel", {
         Size = UDim2.fromScale(1, 1),
         BackgroundTransparency = 1,
-        Ambient = Color3.fromRGB(190, 190, 190),
-        LightColor = Color3.fromRGB(255, 245, 245),
-        LightDirection = Vector3.new(-1, -1, -1),
+        Image = imageAsset(item.Icon),
+        ScaleType = Enum.ScaleType.Fit,
         Parent = previewHolder,
     })
-    mountAssetPreview(viewport, item)
 
-    local textLeft = TOUCH and 84 or 78
+    local textLeft = TOUCH and 90 or 84
     label({
-        Position = UDim2.fromOffset(textLeft, 9),
-        Size = UDim2.new(1, -(textLeft + 10), 0, 20),
+        Position = UDim2.fromOffset(textLeft, 11),
+        Size = UDim2.new(1, -(textLeft + 96), 0, 20),
         Text = tostring(item.Name or "Unknown"),
         TextSize = 14,
         TextTruncate = Enum.TextTruncate.AtEnd,
         Parent = row,
     })
-    label({
-        Position = UDim2.fromOffset(textLeft, 31),
-        Size = UDim2.new(1, -(textLeft + 10), 0, 17),
-        Text = string.format("%s | %s kg | %s", tostring(item.Rarity or "Unknown"), tostring(item.Weight or "0.00"), tostring(item.Time or "--:--:--")),
-        TextSize = 11,
-        FontFace = Fonts.Regular,
-        TextColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Muted,
+    local rarityChip = create("TextLabel", {
+        AnchorPoint = Vector2.new(1, 0),
+        Position = UDim2.new(1, -10, 0, 11),
+        Size = UDim2.fromOffset(78, 22),
+        BackgroundColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Surface3,
+        BorderSizePixel = 0,
+        Text = tostring(item.Rarity or "Unknown"),
+        TextSize = 10,
+        TextColor3 = Theme.AccentDark,
+        FontFace = Fonts.Medium,
         TextTruncate = Enum.TextTruncate.AtEnd,
         Parent = row,
     })
+    corner(rarityChip, UDim.new(0, 6))
     label({
-        Position = UDim2.fromOffset(textLeft, 49),
-        Size = UDim2.new(1, -(textLeft + 10), 0, 17),
+        Position = UDim2.fromOffset(textLeft, 38),
+        Size = UDim2.new(1, -(textLeft + 10), 0, 18),
         Text = "Gen: " .. compactNumber(item.Gen),
+        TextSize = 11,
+        FontFace = Fonts.Regular,
+        TextColor3 = Theme.Muted,
+        Parent = row,
+    })
+    label({
+        Position = UDim2.fromOffset(textLeft, 59),
+        Size = UDim2.new(1, -(textLeft + 10), 0, 18),
+        Text = "KG: " .. tostring(item.Weight or "0.00"),
         TextSize = 11,
         FontFace = Fonts.Regular,
         TextColor3 = Theme.Muted,

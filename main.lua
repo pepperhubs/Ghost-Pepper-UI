@@ -5251,6 +5251,67 @@ function Tab:AddAssetFilter(options)
     return self:AssetFilter(options)
 end
 
+function Tab:AddAssetLogItem(item)
+    item = type(item) == "table" and item or {}
+    local row, rowStroke = card(self, "Frame", TOUCH and 78 or 72, {})
+    row.ClipsDescendants = true
+    rowStroke.Color = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Stroke
+
+    create("Frame", {
+        Size = UDim2.fromOffset(3, TOUCH and 78 or 72),
+        BackgroundColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Accent,
+        BorderSizePixel = 0,
+        Parent = row,
+    })
+    local previewHolder = create("Frame", {
+        Position = UDim2.fromOffset(10, 7),
+        Size = UDim2.fromOffset(TOUCH and 64 or 58, TOUCH and 64 or 58),
+        BackgroundColor3 = Theme.Surface2,
+        BorderSizePixel = 0,
+        Parent = row,
+    })
+    corner(previewHolder, UDim.new(0, 6))
+    local viewport = create("ViewportFrame", {
+        Size = UDim2.fromScale(1, 1),
+        BackgroundTransparency = 1,
+        Ambient = Color3.fromRGB(190, 190, 190),
+        LightColor = Color3.fromRGB(255, 245, 245),
+        LightDirection = Vector3.new(-1, -1, -1),
+        Parent = previewHolder,
+    })
+    mountAssetPreview(viewport, item)
+
+    local textLeft = TOUCH and 84 or 78
+    label({
+        Position = UDim2.fromOffset(textLeft, 9),
+        Size = UDim2.new(1, -(textLeft + 10), 0, 20),
+        Text = tostring(item.Name or "Unknown"),
+        TextSize = 14,
+        TextTruncate = Enum.TextTruncate.AtEnd,
+        Parent = row,
+    })
+    label({
+        Position = UDim2.fromOffset(textLeft, 31),
+        Size = UDim2.new(1, -(textLeft + 10), 0, 17),
+        Text = string.format("%s | %s kg | %s", tostring(item.Rarity or "Unknown"), tostring(item.Weight or "0.00"), tostring(item.Time or "--:--:--")),
+        TextSize = 11,
+        FontFace = Fonts.Regular,
+        TextColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Muted,
+        TextTruncate = Enum.TextTruncate.AtEnd,
+        Parent = row,
+    })
+    label({
+        Position = UDim2.fromOffset(textLeft, 49),
+        Size = UDim2.new(1, -(textLeft + 10), 0, 17),
+        Text = "Gen: " .. compactNumber(item.Gen),
+        TextSize = 11,
+        FontFace = Fonts.Regular,
+        TextColor3 = Theme.Muted,
+        Parent = row,
+    })
+    return finishElement(self, {}, {}, row, "AssetLogItem")
+end
+
 Window.AddTab = Window.Tab
 Tab.CreateSection = Tab.Section
 Tab.CreateButton = Tab.Button

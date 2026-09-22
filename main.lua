@@ -4967,6 +4967,7 @@ function Tab:AssetFilter(opts)
         TextXAlignment = Enum.TextXAlignment.Right,
         Parent = frame,
     })
+    summary.Visible = opts.ReadOnly ~= true
 
     local searchHolder = create("Frame", {
         Position = UDim2.fromOffset(14, 38),
@@ -5102,7 +5103,7 @@ function Tab:AssetFilter(opts)
             label({
                 Position = UDim2.fromOffset(textLeft, 34),
                 Size = UDim2.new(1, -(textLeft + 98), 0, 18),
-                Text = "Gen: " .. compactNumber(item.Gen),
+                Text = item.Details or ("Gen: " .. compactNumber(item.Gen)),
                 TextSize = 12,
                 FontFace = Fonts.Regular,
                 TextColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Muted,

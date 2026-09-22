@@ -5081,15 +5081,13 @@ function Tab:AssetFilter(opts)
                 Parent = rowFrame,
             })
             corner(previewHolder, UDim.new(0, 6))
-            local viewport = create("ViewportFrame", {
+            create("ImageLabel", {
                 Size = UDim2.fromScale(1, 1),
                 BackgroundTransparency = 1,
-                Ambient = Color3.fromRGB(190, 190, 190),
-                LightColor = Color3.fromRGB(255, 245, 245),
-                LightDirection = Vector3.new(-1, -1, -1),
+                Image = imageAsset(item.Icon),
+                ScaleType = Enum.ScaleType.Fit,
                 Parent = previewHolder,
             })
-            mountAssetPreview(viewport, item)
 
             local textLeft = TOUCH and 82 or 76
             label({
@@ -5297,29 +5295,49 @@ function Tab:AddAssetLogItem(item)
         BackgroundColor3 = typeof(item.RarityColor) == "Color3" and item.RarityColor or Theme.Surface3,
         BorderSizePixel = 0,
         Text = tostring(item.Rarity or "Unknown"),
-        TextSize = 10,
+        TextSize = 11,
         TextColor3 = Theme.AccentDark,
-        FontFace = Fonts.Medium,
+        FontFace = Fonts.Bold,
         TextTruncate = Enum.TextTruncate.AtEnd,
         Parent = row,
     })
     corner(rarityChip, UDim.new(0, 6))
     label({
         Position = UDim2.fromOffset(textLeft, 38),
-        Size = UDim2.new(1, -(textLeft + 10), 0, 18),
-        Text = "Gen: " .. compactNumber(item.Gen),
-        TextSize = 11,
-        FontFace = Fonts.Regular,
-        TextColor3 = Theme.Muted,
+        Size = UDim2.fromOffset(34, 18),
+        Text = "Gen:",
+        TextSize = 12,
+        FontFace = Fonts.Bold,
+        TextColor3 = Theme.Text,
+        Parent = row,
+    })
+    label({
+        Position = UDim2.fromOffset(textLeft + 36, 38),
+        Size = UDim2.new(1, -(textLeft + 46), 0, 18),
+        Text = compactNumber(item.Gen),
+        TextSize = 12,
+        FontFace = Fonts.Bold,
+        TextColor3 = Theme.Success,
+        TextTruncate = Enum.TextTruncate.AtEnd,
         Parent = row,
     })
     label({
         Position = UDim2.fromOffset(textLeft, 59),
-        Size = UDim2.new(1, -(textLeft + 10), 0, 18),
-        Text = "KG: " .. tostring(item.Weight or "0.00"),
-        TextSize = 11,
-        FontFace = Fonts.Regular,
-        TextColor3 = Theme.Muted,
+        Size = UDim2.fromOffset(30, 18),
+        Text = "KG:",
+        TextSize = 12,
+        FontFace = Fonts.Bold,
+        TextColor3 = Theme.Text,
+        Parent = row,
+    })
+    label({
+        Position = UDim2.fromOffset(textLeft + 32, 59),
+        Size = UDim2.new(1, -(textLeft + 42), 0, 18),
+        Text = tostring(item.Weight or "0.00"),
+        TextSize = 12,
+        FontFace = Fonts.Bold,
+        TextColor3 = Theme.Warning,
+        TextTruncate = Enum.TextTruncate.AtEnd,
         Parent = row,
     })
     return finishElement(self, {}, {}, row, "AssetLogItem")

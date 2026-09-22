@@ -2816,7 +2816,7 @@ function Library.Window(_, opts)
         self:_fitToScreen()
         self:_clampToScreen()
     end))
-    if (opts.OpenButton ~= nil and opts.OpenButton ~= false) or (opts.OpenButton == nil and TOUCH) then
+    if opts.OpenButton ~= false then
         self:_createOpenButton(type(opts.OpenButton) == "table" and opts.OpenButton or {})
     end
     self._introDone = false
